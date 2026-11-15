@@ -1,0 +1,310 @@
+/* =========================================================
+   Лабораторна робота 5. Адаптивність (responsive web design)
+   Підключається останньою на всіх сторінках, тому медіазапити
+   перекривають правила з styles.css і внутрішніх таблиць стилів.
+
+   Брейкпоінти (desktop-first, від більшого до меншого):
+     ≥ 1680px — широкі монітори (1920, 1680)
+     ≤ 1366px — ноутбуки
+     ≤ 1024px — планшети в альбомній орієнтації
+     ≤ 768px  — планшети в портретній орієнтації
+     ≤ 600px  — великі смартфони
+     ≤ 360px  — смартфони (360, 320)
+   Окремо: альбомна орієнтація телефона, друк, зменшення анімації.
+   ========================================================= */
+
+/* ---------- 1. Гнучкі зображення та медіа ---------- */
+img,
+picture,
+svg,
+video {
+    max-width: 100%;          /* ніколи не ширші за контейнер */
+    height: auto;             /* пропорції зберігаються */
+}
+iframe,
+audio {
+    max-width: 100%;
+}
+
+/* Плавний розмір назви сайту: від 1.6rem на телефоні до 2.2rem на моніторі */
+h1 {
+    font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.2rem);
+}
+
+/* Поля форм і блоки з рамками не виходять за межі батьківського елемента */
+fieldset,
+input,
+select,
+textarea {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Таблиця керівників прокручується в межах свого блоку */
+#team {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Стабільність верстки (метрика CLS): місце під вміст, який додає JavaScript,
+   резервується заздалегідь, тому сусідні блоки не «стрибають» */
+.carousel-viewport {
+    min-height: 20vh;                 /* висота ілюстрацій каруселі */
+}
+.carousel-caption {
+    min-height: 1.65em;
+}
+.carousel-dots {
+    min-height: 1.5rem;
+}
+
+/* Орієнтовна висота шапки Головної до того, як header-offset.js виміряє точну:
+   чим ближча оцінка, тим менший зсув вмісту після завантаження (CLS) */
+@media only screen and (max-width: 1100px) { .page-home { --header-guess: 16.9rem; } }
+@media only screen and (max-width: 900px)  { .page-home { --header-guess: 18.4rem; } }
+@media only screen and (max-width: 700px)  { .page-home { --header-guess: 20rem; } }
+@media only screen and (max-width: 600px)  { .page-home { --header-guess: 24.75rem; } }
+@media only screen and (max-width: 400px)  { .page-home { --header-guess: 23.1rem; } }
+@media only screen and (max-width: 340px)  { .page-home { --header-guess: 25.6rem; } }
+
+/* ---------- 2. Широкі монітори: ≥ 1680px ---------- */
+@media only screen and (min-width: 1680px) {
+    html {
+        font-size: 106.25%;                       /* 17px замість 16px */
+    }
+    /* Головна: рядки тексту не розтягуються на всю ширину 1920px */
+    .page-home {
+        padding-inline: max(2.5rem, (100% - 92rem) / 2);
+    }
+}
+
+/* ---------- 3. Ноутбуки: ≤ 1366px ---------- */
+@media only screen and (min-width: 1025px) and (max-width: 1366px) {
+    .page-home {
+        grid-template-columns: minmax(0, 1fr) 18rem;
+    }
+}
+
+/* ---------- 4. Планшети (альбомна): ≤ 1024px ---------- */
+@media only screen and (max-width: 1024px) {
+    .page-home {
+        padding-inline: 1.5rem;
+    }
+    .page-home #about {
+        padding: 2rem 2.25rem;
+    }
+    .page-services header {
+        padding-inline: 1.5rem;
+    }
+    .page-services main {
+        width: min(75rem, 100% - 2rem);
+    }
+    .services {
+        gap: 1.25rem;
+    }
+}
+
+/* Дві колонки Головної ще вміщуються до 901px; нижче — одна (див. index.html) */
+@media only screen and (min-width: 901px) and (max-width: 1024px) {
+    .page-home {
+        grid-template-columns: minmax(0, 1fr) 15rem;
+        column-gap: 1.25rem;
+    }
+}
+
+/* ---------- 5. Планшети (портретна): ≤ 768px ---------- */
+@media only screen and (max-width: 768px) {
+    body {
+        font-size: 1rem;
+    }
+    h2 {
+        font-size: 1.4rem;
+    }
+    .page-home main > p:first-child {
+        border-radius: 1.25rem;                   /* рядок переходів переноситься — «пігулка» стає карткою */
+    }
+    .page-home article {
+        padding: 1.5rem 1.5rem;
+    }
+    .page-services main > h2,
+    .page-feedback main > h2 {
+        font-size: 1.7rem;
+    }
+    footer {
+        padding: 1.5rem 1.25rem;
+    }
+}
+
+/* ---------- 6. Смартфони: ≤ 600px ---------- */
+@media only screen and (max-width: 600px) {
+    .carousel-caption {
+        min-height: 3.3em;            /* підпис слайда може переноситися */
+    }
+
+    /* Навігація: пункти переносяться на новий рядок замість виходу за край */
+    header nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+    nav > ul > li > a {
+        padding: 0.375rem 0.75rem;
+    }
+
+    /* Кнопки в шапці Головної — одна під одною на всю ширину */
+    .page-home header > p:last-of-type {
+        grid-auto-flow: row;
+        justify-content: stretch;
+    }
+    .page-home #about {
+        max-height: none;                         /* на телефоні вкладена прокрутка незручна */
+        padding: 1.5rem 1.25rem;
+    }
+    .page-home #about > p:first-of-type::first-letter {
+        font-size: 2.8em;
+    }
+    table {
+        font-size: 0.85rem;
+    }
+    th,
+    td {
+        padding: 0.5rem;
+    }
+
+    .services {
+        grid-template-columns: 1fr;               /* одна колонка карток */
+    }
+    .page-services main > section {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .page-feedback main {
+        padding: 2rem 0.75rem;
+    }
+    .page-feedback form {
+        padding: 1.25rem 1rem;
+        gap: 1rem;
+    }
+    .page-feedback fieldset {
+        padding: 1rem 0.875rem 0.25rem;
+    }
+    .form-actions {
+        flex-direction: column;
+    }
+    .form-actions button {
+        width: 100%;
+    }
+}
+
+/* ---------- 7. Малі смартфони: ≤ 360px ---------- */
+/* Довгі повідомлення друкарської машинки переносяться — резервуємо рядки (CLS) */
+@media only screen and (max-width: 1100px) {
+    .typewriter {
+        min-height: 3.35em;           /* 2 рядки */
+    }
+}
+@media only screen and (max-width: 400px) {
+    .typewriter {
+        min-height: 5em;              /* на вузькому екрані — до 3 рядків */
+    }
+}
+
+@media only screen and (max-width: 360px) {
+    header img {
+        width: 3rem;
+        height: 3rem;
+    }
+    .page-home header {
+        column-gap: 0.75rem;
+        padding: 0.875rem 0.875rem 1.125rem;
+    }
+    .page-home {
+        padding-inline: 0.625rem;
+    }
+    nav > ul > li > a {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.95rem;
+    }
+    .carousel {
+        padding: 1rem 0.5rem;
+        gap: 0.5rem;
+    }
+    .carousel .carousel-btn {
+        width: 2.25rem;
+        height: 2.25rem;
+    }
+}
+
+/* ---------- 8. Телефон в альбомній орієнтації ---------- */
+/* Фіксована шапка «Послуг» не повинна займати половину низького екрана */
+@media only screen and (orientation: landscape) and (max-height: 500px) {
+    .page-services header {
+        position: absolute;
+    }
+    .carousel img {
+        height: 30vh;
+    }
+}
+
+/* ---------- 9. Користувач просить менше анімації ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ---------- 10. Друк (тип носія print) ---------- */
+@media print {
+    body {
+        background: white;
+        color: black;
+        font-size: 12pt;
+    }
+    .page-home,
+    .page-services {
+        display: block;
+        padding: 0;
+    }
+    header,
+    .page-services header {
+        position: static;
+        background: none;
+        color: black;
+        box-shadow: none;
+    }
+    header h1,
+    header p {
+        color: black;
+    }
+    nav,
+    button,
+    .typewriter,
+    .page-home main > p:first-child,
+    .carousel,
+    audio,
+    iframe,
+    dialog,
+    .tooltip {
+        display: none !important;
+    }
+    article,
+    aside,
+    section,
+    form {
+        box-shadow: none;
+        border: 1px solid #999;
+        break-inside: avoid;
+    }
+    #about {
+        max-height: none;
+        overflow: visible;
+    }
+    main a[href^="http"]::after {
+        content: " (" attr(href) ")";             /* на папері видно адресу посилання */
+        font-size: 0.8em;
+    }
+}

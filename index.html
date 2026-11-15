@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MindCare — онлайн-консультації психолога: індивідуальна, сімейна та дитяча терапія.">
+    <title>MindCare - Психологічні онлайн-консультації</title>
+    <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+    <!-- ЛР5: normalize.css вирівнює стилі за замовчуванням у різних браузерах -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dynamic.css">
+    <script src="js/daytime.js" defer></script>
+    <script src="js/typewriter.js" defer></script>
+    <script src="js/header-offset.js" defer></script>
+    <!-- Внутрішня таблиця стилів: правила, специфічні для Головної сторінки -->
+    <style>
+        /* ===== Сітка сторінки (Grid) ===== */
+        body {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 20rem;
+            grid-template-areas:
+                "main   aside"
+                "footer footer";
+            column-gap: 1.75rem;
+            row-gap: 3rem;
+            padding: calc(var(--header-h, var(--header-guess, 13.5rem)) + 3.125rem) 2.5rem 0;   /* висота шапки + відступ */
+        }
+
+        /* ===== Шапка: абсолютне позиціонування з 0 відступом зверху ===== */
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            grid-template-areas:
+                "logo title   actions"
+                "logo typer   actions"
+                "logo tagline actions"
+                "logo nav     actions";
+            column-gap: 1.5rem;
+            row-gap: 0.375rem;
+            align-items: center;
+            padding: 1.375rem 2.5rem 1.625rem;
+        }
+        header img           { grid-area: logo; }
+        header h1            { grid-area: title; }
+        header .typewriter   { grid-area: typer; }
+        header .tagline      { grid-area: tagline; }
+        header nav           { grid-area: nav; margin-top: 0.375rem; }
+        header > p:last-of-type {
+            grid-area: actions;
+            display: grid;
+            gap: 0.625rem;
+        }
+
+        /* ===== Основна частина ===== */
+        main {
+            grid-area: main;
+            position: relative;
+            display: grid;
+            align-content: start;
+        }
+
+        /* Рядок швидкого переходу */
+        main > p:first-child {
+            margin: 0 0 0.75rem;
+            padding: 0.625rem 1.25rem;
+            border-radius: 999px;
+            background-color: var(--sage-light);
+            justify-self: start;
+        }
+        main > p:first-child a {
+            color: var(--forest);
+            font-weight: 700;
+        }
+
+        article {
+            margin: 1rem 0;
+            padding: 1.75rem 2rem;
+        }
+
+        /* ===== Блок «Мета створення»: зовнішні відступи менші за внутрішні ===== */
+        #about {
+            margin: 0.5rem 0;              /* зовнішні — 0.5rem (8px)  */
+            padding: 2.5rem 3rem;         /* внутрішні — 2.5rem і 3rem (40px і 48px) */
+            /* найбільше тексту → смуга прокручування з'являється, коли текст не вміщується */
+            max-height: 32.5rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: var(--sage) transparent;
+        }
+
+        /* ЛР5: scrollbar-width/color не підтримує Safari — для WebKit/Blink свій псевдоелемент */
+        #about::-webkit-scrollbar {
+            width: 8px;
+        }
+        #about::-webkit-scrollbar-thumb {
+            background-color: var(--sage);
+            border-radius: 8px;
+        }
+
+        /* Перша літера опису мети: псевдоелемент ::first-letter + float */
+        #about > p:first-of-type::first-letter {
+            float: left;
+            font-family: "Lora", Georgia, serif;
+            font-size: 3.6em;
+            line-height: 0.9;
+            margin: 0.375rem 0.75rem 0 0;
+            color: hsl(270, 70%, 78%);                         /* світло-фіолетовий */
+            text-shadow: 3px 3px 0 rgba(47, 74, 58, 0.35);    /* тінь */
+        }
+
+        /* Загальний комбінатор сусідніх елементів (~): абзаци після підзаголовка */
+        #about h3 ~ p {
+            border-left: 4px solid var(--sage);
+            padding-left: 1rem;
+        }
+
+        #about ol li::marker {
+            color: var(--clay);
+            font-weight: 800;
+        }
+
+        /* ===== Історія та таблиця керівників: перехід (transition) ===== */
+        #history,
+        #team {
+            transition:
+                transform 0.35s ease,
+                box-shadow 0.35s ease,
+                background-color 0.35s ease;
+        }
+        #history:hover,
+        #team:hover {
+            transform: translate(-5px, 5px);                  /* 5px ліворуч і вниз */
+            box-shadow: -10px 14px 30px rgba(47, 74, 58, 0.22);
+            background-color: var(--card-hover);
+        }
+
+        #team {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        caption {
+            font-family: "Lora", Georgia, serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--forest);
+            padding-bottom: 0.75rem;
+        }
+        th,
+        td {
+            border: 1px solid #ddd5c5;
+            padding: 0.625rem 0.75rem;
+            text-align: left;
+            vertical-align: middle;
+        }
+        thead th {
+            background-color: var(--sage-light);
+            color: var(--forest);
+            text-align: center;
+        }
+        tbody tr:nth-child(even) {
+            background-color: var(--row-alt);
+        }
+        tfoot th,
+        tfoot td {
+            background-color: var(--forest);
+            color: var(--sand);
+            font-weight: 700;
+        }
+
+        /* ===== Бічна панель: «липке» позиціонування ===== */
+        aside {
+            grid-area: aside;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 1.5rem;
+            z-index: 1;
+            align-self: start;
+            margin-top: 4rem;
+            padding: 1.75rem;
+            border-left: 6px solid var(--clay);
+        }
+        aside ul {
+            padding-left: 1.25rem;
+        }
+        aside a {
+            color: var(--forest);
+        }
+
+        /* ===== Підвал: через 2 с наведення шрифт стає червоним напівжирним ===== */
+        footer {
+            grid-area: footer;
+        }
+        footer address {
+            font-style: normal;
+            transition: color 0s, font-weight 0s;
+        }
+        footer address:hover {
+            color: red;
+            font-weight: 700;
+            transition-delay: 2s;
+        }
+        /* посилання успадковують колір адреси, тож змінюються разом із нею */
+        footer address:hover a {
+            color: inherit;
+        }
+
+        /* ===== Адаптивність ===== */
+        @media (max-width: 900px) {
+            body {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "main"
+                    "aside"
+                    "footer";
+                padding: calc(var(--header-h, var(--header-guess, 18.4rem)) + 2rem) 1rem 0;
+            }
+            header {
+                grid-template-columns: auto 1fr;
+                grid-template-areas:
+                    "logo    title"
+                    "typer   typer"
+                    "tagline tagline"
+                    "nav     nav"
+                    "actions actions";
+                padding: 1.125rem 1.25rem 1.375rem;
+            }
+            header > p:last-of-type {
+                grid-auto-flow: column;
+                justify-content: start;
+            }
+            aside {
+                position: static;
+                margin-top: 0;
+            }
+            #about {
+                padding: 1.75rem 1.5rem;
+            }
+        }
+    </style>
+    <!-- ЛР5: медіазапити підключено останніми, щоб вони мали вищий пріоритет -->
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="page-home">
+
+    <header>
+        <img src="img/logo.svg" alt="Логотип MindCare" width="90" height="90">
+        <h1>MindCare</h1>
+        <p class="typewriter" id="typewriter"></p>
+        <p class="tagline"><i>Психологічні онлайн-консультації — турбота про себе без черг і відстаней</i></p>
+
+        <nav>
+            <ul>
+                <li><a href="index.html" aria-current="page">Головна</a></li>
+                <li><a href="services.html">Послуги</a></li>
+                <li><a href="feedback.html">Зворотній зв'язок</a></li>
+            </ul>
+        </nav>
+
+        <p>
+            <button type="button" title="Вхід до особистого кабінету клієнта">Перейти у власний кабінет</button>
+            <button type="button" title="Створити новий обліковий запис">Зареєструватись</button>
+        </p>
+    </header>
+
+    <main>
+        <p>
+            Швидкий перехід:
+            <a href="#about">Про нас</a> |
+            <a href="#history">Історія</a> |
+            <a href="#team">Керівництво</a> |
+            <a href="#contacts">Контакти</a>
+        </p>
+
+        <article id="about">
+            <h2>Мета створення MindCare</h2>
+            <p>
+                MindCare створено, щоб зробити кваліфіковану психологічну допомогу доступною
+                кожному, незалежно від місця проживання, графіка роботи чи бюджету. Ми поєднуємо
+                досвід сертифікованих психологів із зручністю відеозв'язку, щоб людина могла
+                отримати підтримку тоді, коли вона найбільше потрібна.
+            </p>
+
+            <h3>Завдання для досягнення мети</h3>
+            <ol type="1">
+                <li>Залучати до роботи лише сертифікованих психологів і психотерапевтів з досвідом від 3 років.</li>
+                <li>Забезпечити запис на консультацію протягом 24 годин без черг і зайвих дзвінків.</li>
+                <li>Гарантувати конфіденційність: захищений відеозв'язок і зберігання даних відповідно до законодавства.</li>
+                <li>Пропонувати гнучкі тарифи та безкоштовну першу зустріч-знайомство.</li>
+                <li>Регулярно проводити супервізію фахівців для підтримки високої якості послуг.</li>
+            </ol>
+
+            <h3>Місце у сфері надання послуг</h3>
+            <p>
+                MindCare належить до сфери медико-психологічних послуг і працює у форматі
+                <dfn>телепсихології</dfn> — дистанційного консультування за допомогою інтернету.
+                Сервіс не замінює екстреної медичної допомоги, але доповнює роботу державних
+                і приватних закладів, знімаючи бар'єри доступу до психолога.
+            </p>
+            <p>
+                <span>Ми віримо, що</span> <i>піклування про психічне здоров'я</i> — це
+                <b>така ж норма</b>, як турбота про фізичне, а <em>звернення по допомогу</em> —
+                ознака <u>сили, а не слабкості</u>.
+            </p>
+        </article>
+
+        <article id="history">
+            <h2>Історія виникнення</h2>
+            <p>
+                Ідея MindCare з'явилася у 2020 році, коли через пандемію більшість очних
+                консультацій стали неможливими. Група київських психологів почала проводити
+                зустрічі з клієнтами онлайн і переконалася, що такий формат не поступається
+                за ефективністю традиційному.
+            </p>
+            <p>
+                У 2021 році сервіс отримав власну платформу для запису та відеозв'язку,
+                а з 2022 року розширив роботу: з'явилися напрями кризової підтримки,
+                роботи з тривогою та посттравматичним досвідом. Сьогодні в команді понад
+                40 фахівців, які щомісяця проводять більше 2000 консультацій.
+            </p>
+        </article>
+
+        <article id="team">
+            <h2>Керівництво установи</h2>
+            <table border="1" cellpadding="6">
+                <caption>Керівники MindCare: досвід та освіта</caption>
+                <thead>
+                    <tr>
+                        <th rowspan="2">№</th>
+                        <th rowspan="2">Прізвище та ініціали</th>
+                        <th rowspan="2">Посада</th>
+                        <th colspan="2">Досвід роботи, років</th>
+                        <th rowspan="2">Освіта</th>
+                    </tr>
+                    <tr>
+                        <th>загальний</th>
+                        <th>у MindCare</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Коваленко О. В.</td>
+                        <td>Засновниця, директорка</td>
+                        <td>18</td>
+                        <td>6</td>
+                        <td rowspan="2">КНУ імені Тараса Шевченка, факультет психології</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Мельник А. С.</td>
+                        <td>Клінічний директор</td>
+                        <td>15</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Бондар І. П.</td>
+                        <td>Керівник напряму сімейної терапії</td>
+                        <td>12</td>
+                        <td>5</td>
+                        <td rowspan="2">НаУКМА, магістратура з психології</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Ткаченко Ю. М.</td>
+                        <td>Керівниця дитячого напряму</td>
+                        <td>10</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Шевчук Д. О.</td>
+                        <td>Технічний директор</td>
+                        <td colspan="2">9 (з них 4 — у MindCare)</td>
+                        <td>КПІ ім. Ігоря Сікорського, інженерія ПЗ</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Лисенко М. Р.</td>
+                        <td>Керівниця служби якості</td>
+                        <td>11</td>
+                        <td>5</td>
+                        <td>ЛНУ імені Івана Франка, психологія</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="3">Усього керівників: 6</th>
+                        <td colspan="2">Середній загальний досвід: 12,5 року</td>
+                        <td>4 заклади вищої освіти</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </article>
+    </main>
+
+    <aside>
+        <h2>Потрібна допомога зараз?</h2>
+        <p>
+            Якщо вам загрожує небезпека, телефонуйте <b>103</b> або <b>112</b>.
+            Цілодобова лінія психологічної підтримки Lifeline Ukraine — <b>7333</b>.
+        </p>
+        <p>Корисні ресурси про психічне здоров'я:</p>
+        <ul>
+            <li><a href="https://moz.gov.ua/" target="_blank">Міністерство охорони здоров'я України</a></li>
+            <li><a href="https://www.who.int/health-topics/mental-health" target="_blank">ВООЗ: психічне здоров'я</a></li>
+        </ul>
+    </aside>
+
+    <footer id="contacts">
+        <h2>Контакти</h2>
+        <address>
+            Адреса: м. Київ, вул. Січових Стрільців, 21, офіс 305<br>
+            Телефони: <a href="tel:+380441234567">+38 (044) 123-45-67</a>,
+            <a href="tel:+380671234567">+38 (067) 123-45-67</a><br>
+            E-mail: <a href="mailto:hello@mindcare.ua">hello@mindcare.ua</a>
+        </address>
+        <p>Графік: пн–пт 08:00–21:00, сб–нд 10:00–18:00</p>
+        <p><small>&copy; 2026 MindCare. Усі права захищено. <a href="#about">Нагору &uarr;</a></small></p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+<rect width="320" height="200" fill="#edf6f9"/>
+<path d="M160 30 L230 60 V100 C230 140 200 160 160 172 C120 160 90 140 90 100 V60 Z" fill="#006d77"/><path d="M130 100 L152 122 L194 80" stroke="#ffffff" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="160" y="190" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#006d77">Кризова підтримка</text>
+</svg>

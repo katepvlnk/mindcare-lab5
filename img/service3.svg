@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+<rect width="320" height="200" fill="#fdf3e7"/>
+<path d="M60 110 Q90 60 120 110 T180 110 T240 110 T270 110" stroke="#e07a5f" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M60 140 Q100 125 140 140 T220 140 T270 140" stroke="#81b29a" stroke-width="8" fill="none" stroke-linecap="round"/>
+<text x="160" y="190" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#e07a5f">Спокій замість тривоги</text>
+</svg>

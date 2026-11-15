@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Послуги MindCare: перша зустріч, індивідуальні, сімейні та дитячі онлайн-консультації психолога, ціни та тривалість сесій.">
+    <title>Послуги | MindCare</title>
+    <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+    <!-- ЛР5: normalize.css вирівнює стилі за замовчуванням у різних браузерах -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dynamic.css">
+    <script src="js/carousel.js" defer></script>
+    <script src="js/lot-question.js" defer></script>
+    <script src="js/header-offset.js" defer></script>
+    <!-- Внутрішня таблиця стилів: правила сторінки «Послуги» -->
+    <style>
+        /* ===== Шапка зафіксована зверху ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            grid-template-areas:
+                "logo title   nav"
+                "logo tagline nav";
+            column-gap: 1.25rem;
+            align-items: center;
+            padding: 0.875rem 2.5rem;
+        }
+        header img               { grid-area: logo; width: 4rem; height: 4rem; }
+        header h1                { grid-area: title; font-size: 1.8rem; }
+        header > p               { grid-area: tagline; }
+        header nav               { grid-area: nav; }
+
+        /* ===== Сітка сторінки (Grid) ===== */
+        body {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            min-height: 100vh;
+            padding-top: calc(var(--header-h, 5.75rem) + 2.375rem);   /* висота шапки + відступ */
+        }
+        main {
+            display: grid;
+            gap: 1.5rem;
+            width: min(75rem, 100% - 3rem);
+            margin: 0 auto 3rem;
+        }
+        main > h2 {
+            font-size: 2rem;
+            margin-bottom: 0;
+        }
+
+        /* Картки послуг: адаптивна сітка */
+        .services {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(16.875rem, 1fr));
+            gap: 1.75rem;
+        }
+        .services > li {
+            display: grid;
+        }
+
+        /* Рамка темно-голубого кольору: верхня межа суцільна тонка, решта — крапкові */
+        .services article {
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            padding: 1.25rem 1.375rem;
+            border: 3px dotted rgb(0, 119, 182);
+            border-top: 1px solid rgb(0, 119, 182);
+            border-radius: 24px 24px 24px 6px;
+        }
+        .services h3 {
+            margin: 0 0 0.75rem;
+            font-size: 1.2rem;
+        }
+        figure {
+            margin: 0 0 0.5rem;
+        }
+        figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 18px 6px 18px 6px;
+        }
+        figcaption {
+            margin-top: 0.375rem;
+            font-size: 0.85rem;
+            color: var(--sage);
+            text-align: center;
+        }
+
+        /* Ілюстрація при наведенні анімується до свого негативу */
+        figure img:hover {
+            animation: to-negative 0.8s ease forwards;
+        }
+        @keyframes to-negative {
+            from { -webkit-filter: invert(0); filter: invert(0); }
+            to   { -webkit-filter: invert(1); filter: invert(1); }
+        }
+
+        /* «Вартість послуги»: більша вага і висота гліфів, похилий шрифт */
+        .price {
+            margin: 0.5rem 0 0;
+            font-size: 1.3em;
+            font-weight: 800;
+            font-style: italic;
+            color: var(--forest);
+        }
+        .price b {
+            font-weight: 900;
+        }
+
+        /* Посилання, за якими ще не переходили, — світло-зелені */
+        a:link {
+            color: lightgreen;
+        }
+
+        /* Блок з аудіо та картою */
+        main > section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-areas:
+                "title title"
+                "a-head m-head"
+                "a-text map"
+                "audio  map";
+            grid-template-rows: auto auto auto 1fr;
+            column-gap: 2rem;
+            align-items: start;
+            padding: 2rem 2.25rem;
+        }
+        main > section h2                  { grid-area: title; }
+        main > section h3:first-of-type    { grid-area: a-head; margin: 0 0 0.5rem; }
+        main > section h3:last-of-type     { grid-area: m-head; margin: 0 0 0.5rem; }
+        main > section p                   { grid-area: a-text; margin-top: 0; }
+        main > section audio               { grid-area: audio; width: 100%; }
+        main > section iframe {
+            grid-area: map;
+            width: 100%;
+            border: 0;
+            border-radius: 18px;
+        }
+
+        main > form {
+            justify-self: center;
+        }
+
+        footer {
+            text-align: center;
+        }
+
+        @media (max-width: 800px) {
+            header {
+                position: fixed;
+                grid-template-columns: auto 1fr;
+                grid-template-areas:
+                    "logo title"
+                    "nav  nav";
+                padding: 0.625rem 1rem;
+            }
+            header > p { display: none; }
+            body { padding-top: calc(var(--header-h, 7.75rem) + 2rem); }
+            main > section {
+                grid-template-columns: 1fr;
+                grid-template-areas: "title" "a-head" "a-text" "audio" "m-head" "map";
+            }
+        }
+    </style>
+    <!-- ЛР5: медіазапити підключено останніми, щоб вони мали вищий пріоритет -->
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="page-services">
+
+    <header>
+        <img src="img/logo.svg" alt="Логотип MindCare" width="90" height="90">
+        <h1>MindCare</h1>
+        <p><i>Психологічні онлайн-консультації</i></p>
+        <nav>
+            <ul>
+                <li><a href="index.html">Головна</a></li>
+                <li><a href="services.html" aria-current="page">Послуги</a></li>
+                <li><a href="feedback.html">Зворотній зв'язок</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Карусель з ілюстрацій послуг (слайди будує js/carousel.js) -->
+        <div class="carousel" role="region" aria-roledescription="карусель" aria-label="Ілюстрації послуг">
+            <button type="button" class="carousel-btn carousel-prev" aria-label="Попередня послуга">&lsaquo;</button>
+            <div class="carousel-viewport">
+                <ul class="carousel-track"></ul>
+            </div>
+            <button type="button" class="carousel-btn carousel-next" aria-label="Наступна послуга">&rsaquo;</button>
+            <p class="carousel-caption" aria-live="polite"></p>
+            <div class="carousel-dots"></div>
+        </div>
+
+        <h2>Наші послуги</h2>
+        <p>Усі консультації проводяться онлайн через захищений відеозв'язок. Тривалість стандартної сесії — 50 хвилин.</p>
+
+        <ol class="services">
+            <li>
+                <article>
+                    <h3>Перша зустріч-знайомство</h3>
+                    <figure>
+                        <picture>
+                            <source srcset="img/service1.svg" type="image/svg+xml">
+                            <img src="img/service1.png" alt="Перша зустріч з психологом" width="320" height="200">
+                        </picture>
+                        <figcaption>Знайомство з психологом</figcaption>
+                    </figure>
+                    <p>Коротка зустріч, під час якої ви розповідаєте про свій запит, а фахівець пояснює, як може допомогти, і пропонує план роботи.</p>
+                    <p class="price"><b>Вартість:</b> безкоштовно (20 хв)</p>
+                </article>
+            </li>
+            <li>
+                <article>
+                    <h3>Індивідуальна консультація</h3>
+                    <figure>
+                        <img src="img/service2.svg" alt="Індивідуальна консультація" width="320" height="200">
+                        <figcaption>Робота один на один</figcaption>
+                    </figure>
+                    <p>Робота з особистими труднощами: стрес, самооцінка, прийняття рішень, складні життєві ситуації.</p>
+                    <p class="price"><b>Вартість:</b> 900 грн / 50 хв</p>
+                </article>
+            </li>
+            <li>
+                <article>
+                    <h3>Робота з тривогою та панічними атаками</h3>
+                    <figure>
+                        <img src="img/service3.svg" alt="Робота з тривогою" width="320" height="200">
+                        <figcaption>Когнітивно-поведінковий підхід</figcaption>
+                    </figure>
+                    <p>Курс сесій із застосуванням методів КПТ: розпізнавання тривожних думок, техніки дихання та саморегуляції.</p>
+                    <p class="price"><b>Вартість:</b> 1000 грн / 50 хв</p>
+                </article>
+            </li>
+            <li>
+                <article>
+                    <h3>Сімейна та парна терапія</h3>
+                    <figure>
+                        <img src="img/service4.svg" alt="Сімейна терапія" width="320" height="200">
+                        <figcaption>Консультація для пари або родини</figcaption>
+                    </figure>
+                    <p>Допомога у вирішенні конфліктів, налагодженні комунікації та відновленні довіри між партнерами чи членами родини.</p>
+                    <p class="price"><b>Вартість:</b> 1400 грн / 80 хв</p>
+                </article>
+            </li>
+            <li>
+                <article>
+                    <h3>Дитячий та підлітковий психолог</h3>
+                    <figure>
+                        <img src="img/service5.svg" alt="Дитячий психолог" width="320" height="200">
+                        <figcaption>Підтримка дітей і підлітків</figcaption>
+                    </figure>
+                    <p>Консультації для дітей від 7 років і підлітків, а також для батьків щодо виховання та адаптації дитини.</p>
+                    <p class="price"><b>Вартість:</b> 950 грн / 50 хв</p>
+                </article>
+            </li>
+            <li>
+                <article>
+                    <h3>Кризова підтримка</h3>
+                    <figure>
+                        <img src="img/service6.svg" alt="Кризова підтримка" width="320" height="200">
+                        <figcaption>Допомога у гострих ситуаціях</figcaption>
+                    </figure>
+                    <p>Термінова консультація протягом 2 годин після звернення для людей, які переживають втрату, шок чи гостру стресову реакцію.</p>
+                    <p class="price"><b>Вартість:</b> 800 грн / 50 хв</p>
+                </article>
+            </li>
+            <li>
+                <article>
+                    <h3>Профілактика професійного вигорання</h3>
+                    <figure>
+                        <img src="img/service7.svg" alt="Профілактика вигорання" width="320" height="200">
+                        <figcaption>Баланс між роботою та життям</figcaption>
+                    </figure>
+                    <p>Програма з 6 сесій для працівників і керівників: діагностика рівня вигорання, відновлення ресурсу, планування навантаження.</p>
+                    <p class="price"><b>Вартість:</b> 4800 грн / 6 сесій</p>
+                </article>
+            </li>
+            <li>
+                <article>
+                    <h3>Групова підтримка</h3>
+                    <figure>
+                        <img src="img/service8.svg" alt="Групова терапія" width="320" height="200">
+                        <figcaption>Онлайн-група до 8 учасників</figcaption>
+                    </figure>
+                    <p>Щотижневі зустрічі в малих групах з ведучим-психологом: обмін досвідом і взаємна підтримка.</p>
+                    <p class="price"><b>Вартість:</b> 400 грн / 90 хв</p>
+                </article>
+            </li>
+        </ol>
+
+        <section>
+            <h2>Спробуйте прямо зараз</h2>
+            <h3>Дихальна вправа «4–4»</h3>
+            <p>Вдихайте, поки звук наростає, і видихайте, поки він затихає. Тривалість — 40 секунд.</p>
+            <audio controls preload="metadata">
+                <source src="media/breathing.mp3" type="audio/mpeg">
+                Ваш браузер не підтримує відтворення аудіо.
+            </audio>
+
+            <h3>Де знаходиться наш офіс</h3>
+            <iframe src="https://maps.google.com/maps?q=Київ,%20вул.%20Січових%20Стрільців,%2021&amp;z=15&amp;output=embed"
+                    width="600" height="300" title="Карта: офіс MindCare у Києві" loading="lazy"></iframe>
+        </section>
+
+        <form action="index.html">
+            <button type="submit">Повернутися на Головну сторінку</button>
+        </form>
+    </main>
+
+    <!-- Модальне вікно з уточнювальним питанням (керує js/lot-question.js) -->
+    <dialog id="lot-dialog" aria-labelledby="lot-dialog-title">
+        <form>
+            <h2 id="lot-dialog-title">Уточнимо ваш запит</h2>
+            <p>Ви вже деякий час переглядаєте цю послугу. Дайте відповідь на одне питання — так ми перевіримо, чи вона вам підходить.</p>
+            <label for="lot-dialog-answer" id="lot-dialog-question"></label>
+            <textarea id="lot-dialog-answer" rows="4" maxlength="400" placeholder="Ваша відповідь"></textarea>
+            <p id="lot-dialog-note" hidden></p>
+            <div class="dialog-actions">
+                <button type="button" data-close>Пізніше</button>
+                <button type="submit">Надіслати відповідь</button>
+            </div>
+        </form>
+        <div id="lot-dialog-thanks" hidden>
+            <h2>Дякуємо!</h2>
+            <p>Фахівець урахує вашу відповідь під час першої зустрічі й підкаже, чи підходить вам ця послуга.</p>
+            <div class="dialog-actions">
+                <button type="button" data-close>Закрити</button>
+            </div>
+        </div>
+    </dialog>
+
+    <footer>
+        <address>
+            м. Київ, вул. Січових Стрільців, 21, офіс 305 |
+            <a href="tel:+380441234567">+38 (044) 123-45-67</a>
+        </address>
+        <p><small>&copy; 2026 MindCare</small></p>
+    </footer>
+
+</body>
+</html>
